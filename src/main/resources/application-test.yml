@@ -1,7 +1,7 @@
 spring:
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/payment_gateway_test
+    url: jdbc:postgresql://localhost:5432/payment_gateway_test
     username: postgres
     password: postgres
 
