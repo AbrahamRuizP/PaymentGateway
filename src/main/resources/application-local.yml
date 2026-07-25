@@ -1,5 +1,6 @@
-spring:
+# application-local.yml
 
+spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/payment_gateway
     username: postgres
