@@ -1,11 +1,11 @@
+# application.yml
+
 spring:
   application:
     name: payment-gateway
 
-  jackson:
-    default-property-inclusion: non_null
-    serialization:
-      writes-dates-as-timestamps: false
+  profiles:
+    active: local
 
 server:
   servlet:
