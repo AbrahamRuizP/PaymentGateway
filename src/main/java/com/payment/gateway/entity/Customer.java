@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +31,11 @@ public class Customer {
     
     @Transient
     public String getFullName() { return firstName + " " + lastName; }
+
+    /* Relationships */
+    @ToString.Exclude
+    @OneToMany(mappedBy = "customer")
+    private Set<Ledger> ledgers = new HashSet<>();
 
     @PrePersist
     private void prePersist() {
