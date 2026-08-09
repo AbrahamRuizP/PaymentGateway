@@ -5,6 +5,7 @@ import com.payment.gateway.entity.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Payment {
     @Column(name = "id")
     private UUID id;
 
-    private double amount = 0.0;
+    private BigDecimal amount = new BigDecimal("0.0");
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "currency")

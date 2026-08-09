@@ -4,6 +4,7 @@ import com.payment.gateway.entity.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +20,7 @@ public class Ledger {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private double amount = 0.0;
+    private BigDecimal amount = new BigDecimal("0.0");
 
     @Enumerated(EnumType.ORDINAL)
     private Currency currency = Currency.USD;
