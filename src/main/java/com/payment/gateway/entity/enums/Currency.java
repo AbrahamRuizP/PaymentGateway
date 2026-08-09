@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum Currency {
-    USD(0, "USD"),
-    EUR(1, "EUR");
+    USD( "USD"),
+    EUR( "EUR"),
+    CAD("CAD"),
+    GBP("GBP");
 
-    private final int value;
-    private final String displayValue;
+    private final String value;
 
-    Currency(int value, String displayValue) {
-        this.displayValue = displayValue;
+    Currency(String value) {
         this.value = value;
     }
 }

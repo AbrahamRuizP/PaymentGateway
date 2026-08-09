@@ -22,9 +22,10 @@ public class Payment {
     @Column(name = "id")
     private UUID id;
 
+    @Column(precision = 19, scale = 4, nullable = false)
     private BigDecimal amount = new BigDecimal("0.0");
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency")
     private Currency currency = Currency.USD;
     
