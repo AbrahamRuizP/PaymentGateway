@@ -21,7 +21,7 @@ public class Ledger {
 
     private double amount = 0.0;
 
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     private Currency currency = Currency.USD;
 
     @Column(name = "description", columnDefinition = "TEXT")
