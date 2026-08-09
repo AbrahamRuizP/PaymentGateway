@@ -23,14 +23,14 @@ public class Payment {
 
     private double amount = 0.0;
 
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "currency")
     private Currency currency = Currency.USD;
     
     @Column(name = "description", columnDefinition = "TEXT")
     private String description = "";
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PaymentStatus status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
 

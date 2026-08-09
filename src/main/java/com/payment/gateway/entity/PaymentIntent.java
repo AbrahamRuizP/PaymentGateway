@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Builder
-public class PaymentIntents {
+public class PaymentIntent {
 
     @Id
     @Column(name = "id")

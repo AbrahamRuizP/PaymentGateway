@@ -1,7 +1,6 @@
 package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.UserRole;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,7 +19,7 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
-public class User implements UserDetails {
+public class Users implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -51,7 +50,7 @@ public class User implements UserDetails {
     @NotNull
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private UserRole role;
+    private UserRole userRole;
 
     @Column(name = "password_hash")
     private String passwordHash = "";
@@ -70,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.asRole()));
+        return List.of(new SimpleGrantedAuthority(userRole.asRole()));
     }
 
     @Override
