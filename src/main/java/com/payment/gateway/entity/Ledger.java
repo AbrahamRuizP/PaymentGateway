@@ -2,7 +2,6 @@ package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.Currency;
 import com.payment.gateway.entity.enums.EntryType;
-import com.payment.gateway.entity.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
