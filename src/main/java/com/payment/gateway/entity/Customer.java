@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = {"ledgers", "payments", "paymentIntents"})
 @Getter
 @Setter
 public class Customer {
@@ -33,9 +33,14 @@ public class Customer {
     public String getFullName() { return firstName + " " + lastName; }
 
     /* Relationships */
-    @ToString.Exclude
     @OneToMany(mappedBy = "customer")
     private Set<Ledger> ledgers = new HashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Payment> payments = new HashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<PaymentIntent> paymentIntents = new HashSet<>();
 
     @PrePersist
     private void prePersist() {
