@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = {"customer", "merchant"})
 @Getter
 @Setter
 public class Payment {
@@ -37,8 +37,8 @@ public class Payment {
     private PaymentStatus status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
 
     /* Dates */
-    private LocalDate createdAt = null;
-    private LocalDate updatedAt = null;
+    private Instant createdAt = null;
+    private Instant updatedAt = null;
 
     /* External References */
     private UUID providerPaymentId = null;
@@ -47,23 +47,25 @@ public class Payment {
     private String networkReference = "";
 
     /* Idempotency */
+    @Column(name = "idempotency_key")
     private String idempotencyKey = "";
 
     /* Relationships */
-    @ToString.Exclude
-    @OneToMany
-    @Column(name = "merchant_id")
+    @ManyToOne
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
 
-    @ToString.Exclude
-    @OneToMany
-    @Column(name = "customer_id")
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @PrePersist
     private void prePersist() {
         if ( id == null ) {
             id = UUID.randomUUID();
+        }
+        if ( status == null ) {
+            status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
         }
     }
 }
