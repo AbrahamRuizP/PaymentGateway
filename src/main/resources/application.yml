@@ -21,6 +21,31 @@ management:
       exposure:
         include: health,info,metrics,prometheus
 
+payment-gateway:
+  jwt:
+    issuer: payment-gateway
+    secret: ${JWT_SECRET:change-me-in-local}
+    access-token-ttl: 15m
+    refresh-token-ttl: 30d
+
+  api:
+    version: v1
+    base-path: /api
+
+  rate-limit:
+    merchant-requests-per-minute: 120
+    public-requests-per-minute: 30
+
+  timeouts:
+    connect: 2s
+    read: 5s
+    external-api: 3s
+
+  database:
+    schema: payment_gateway
+    audit-schema: payment_gateway_audit
+    default-page-size: 20
+
 logging:
   level:
     root: INFO
