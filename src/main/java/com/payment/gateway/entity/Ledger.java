@@ -48,10 +48,6 @@ public class Ledger {
 
     @PrePersist
     private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-
         if ( createdAt == null ) {
             createdAt = Instant.now();
         }

@@ -43,6 +43,11 @@ CREATE TABLE customer (
 -- ==================================================
 CREATE TABLE merchant (
     id UUID NOT NULL,
+    business_name VARCHAR(255),
+    email VARCHAR(255),
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     CONSTRAINT pk_merchant PRIMARY KEY (id)
 );
@@ -119,18 +124,25 @@ CREATE TABLE payment (
 -- Purpose: Store financial ledger entries.
 -- ==================================================
 CREATE TABLE ledger (
-                        id UUID NOT NULL,
-                        amount NUMERIC(19,4) NOT NULL,
-                        currency VARCHAR(10) NOT NULL,
-                        description TEXT,
+    id UUID NOT NULL,
+    amount NUMERIC(19,4) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    entry_type VARCHAR(50) NOT NULL,
 
-                        customer_id UUID,
+    customer_id UUID,
+    payment_id UUID,
 
-                        CONSTRAINT pk_ledger PRIMARY KEY (id),
+    CONSTRAINT pk_ledger PRIMARY KEY (id),
 
-                        CONSTRAINT fk_ledger_customer
-                            FOREIGN KEY (customer_id)
-                                REFERENCES customer (id)
+    CONSTRAINT fk_ledger_customer
+    FOREIGN KEY (customer_id)
+    REFERENCES customer (id),
+
+    CONSTRAINT fk_ledger_payment
+    FOREIGN KEY (payment_id)
+    REFERENCES payment (id)
 );
 
 -- ==================================================
