@@ -19,9 +19,5 @@ public class WebhookEvent {
     private UUID id;
 
     @PrePersist
-    private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-    }
+    private void prePersist() {}
 }
