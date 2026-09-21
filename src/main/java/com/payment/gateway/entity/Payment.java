@@ -25,12 +25,14 @@ import java.util.UUID;
 public class Payment {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Builder.Default
     @Column(precision = 19, scale = 4, nullable = false)
-    private BigDecimal amount = new BigDecimal("0.0");
+    private BigDecimal amount = BigDecimal.ZERO;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "currency")
     private Currency currency = Currency.USD;
@@ -41,6 +43,9 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PaymentStatus status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
+
+    @Version
+    private int version;
 
     /* Dates */
     private Instant createdAt = null;
@@ -67,9 +72,6 @@ public class Payment {
 
     @PrePersist
     private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
         if ( status == null ) {
             status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
         }

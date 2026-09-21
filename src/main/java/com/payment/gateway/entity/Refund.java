@@ -25,4 +25,7 @@ public class Refund {
 
     @Column(nullable = false)
     private Instant createdAt;
+
+    @Version
+    private int version;
 }
