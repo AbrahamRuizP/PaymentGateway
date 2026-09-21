@@ -47,10 +47,9 @@ public class Users implements UserDetails {
     @Column(name = "reset_token")
     private String resetToken = "";
 
-    @NotNull
     @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private UserRole userRole;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "password_hash")
     private String passwordHash = "";
@@ -60,16 +59,9 @@ public class Users implements UserDetails {
     @Column(name = "username", unique = true)
     private String username = "";
 
-    @PrePersist
-    private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.asRole()));
+        return List.of(new SimpleGrantedAuthority(role.asRole()));
     }
 
     @Override
