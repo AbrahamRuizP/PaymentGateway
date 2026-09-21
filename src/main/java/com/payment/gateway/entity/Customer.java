@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Customer {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "created_at")
@@ -35,6 +35,10 @@ public class Customer {
 
     @Column(columnDefinition = "TEXT")
     private String description = "";
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean deleted = false;
     
     @Transient
     public String getFullName() { return firstName + " " + lastName; }
@@ -51,10 +55,6 @@ public class Customer {
 
     @PrePersist
     private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-
         if ( createdAt == null ) {
             createdAt = Instant.now();
         }
