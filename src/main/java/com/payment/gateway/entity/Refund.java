@@ -3,6 +3,8 @@ package com.payment.gateway.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -18,12 +20,9 @@ public class Refund {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private double amount = 0.0;
+    @Column(nullable = false)
+    private BigDecimal amount = new BigDecimal("0.0");
 
-    @PrePersist
-    private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-    }
+    @Column(nullable = false)
+    private Instant createdAt;
 }
