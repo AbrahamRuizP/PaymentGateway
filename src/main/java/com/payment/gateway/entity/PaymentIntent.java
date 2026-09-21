@@ -13,10 +13,8 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"customer", "merchant", "payment"})
-@Builder
 public class PaymentIntent {
 
     @Id

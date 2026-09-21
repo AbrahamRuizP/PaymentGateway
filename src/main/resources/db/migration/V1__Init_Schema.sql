@@ -27,12 +27,14 @@ CREATE TABLE users (
 -- Purpose: Store payment customers.
 -- ==================================================
 CREATE TABLE customer (
-                          id UUID NOT NULL,
-                          first_name VARCHAR(255),
-                          last_name VARCHAR(255),
-                          description TEXT,
+    id UUID NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-                          CONSTRAINT pk_customer PRIMARY KEY (id)
+    CONSTRAINT pk_customer PRIMARY KEY (id)
 );
 
 -- ==================================================
@@ -40,9 +42,9 @@ CREATE TABLE customer (
 -- Purpose: Store merchants using the payment gateway.
 -- ==================================================
 CREATE TABLE merchant (
-                          id UUID NOT NULL,
+    id UUID NOT NULL,
 
-                          CONSTRAINT pk_merchant PRIMARY KEY (id)
+    CONSTRAINT pk_merchant PRIMARY KEY (id)
 );
 
 -- ==================================================
@@ -103,13 +105,13 @@ CREATE TABLE payment (
                         CONSTRAINT uk_payment_idempotency_key
                         UNIQUE (idempotency_key),
 
-                         CONSTRAINT fk_payment_customer
+                        CONSTRAINT fk_payment_customer
                         FOREIGN KEY (customer_id)
-                                 REFERENCES customer (id),
+                        REFERENCES customer (id),
 
-                         CONSTRAINT fk_payment_merchant
-                             FOREIGN KEY (merchant_id)
-                                 REFERENCES merchant (id)
+                        CONSTRAINT fk_payment_merchant
+                        FOREIGN KEY (merchant_id)
+                        REFERENCES merchant (id)
 );
 
 -- ==================================================
@@ -136,9 +138,15 @@ CREATE TABLE ledger (
 -- Purpose: Store audit events.
 -- ==================================================
 CREATE TABLE audit_event (
-                             id UUID NOT NULL,
+    id UUID NOT NULL,
+    description TEXT NOT NULL,
+    event_type VARCHAR(255),
+    entity_type VARCHAR(50),
+    entity_id UUID,
+    actor_id UUID,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-                             CONSTRAINT pk_audit_event PRIMARY KEY (id)
+    CONSTRAINT pk_audit_event PRIMARY KEY (id)
 );
 
 -- ==================================================

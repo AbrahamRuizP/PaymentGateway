@@ -25,21 +25,20 @@ public class AuditEvent {
 
     private String eventType = "";
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "entity_type")
-    private EntityType entityType = null;
+    private EntityType entityType;
 
     @Column(name = "entity_id")
     private UUID entityId = null;
 
     private UUID actorId = null;
+
+    @Column(nullable = false)
     private Instant createdAt = null;
 
     @PrePersist
     private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-
         if ( createdAt == null ) {
             createdAt = Instant.now();
         }

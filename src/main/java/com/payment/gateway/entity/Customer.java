@@ -24,6 +24,7 @@ public class Customer {
 
     @Column(name = "created_at")
     private Instant createdAt = null;
+
     @Column(name = "updated_at")
     private Instant updatedAt = null;
 
