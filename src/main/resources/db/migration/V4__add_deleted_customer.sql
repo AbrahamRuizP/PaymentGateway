@@ -1,0 +1,3 @@
+ALTER TABLE customer
+ADD IF NOT EXISTS deleted BOOLEAN NOT NULL
+DEFAULT false;

@@ -2,7 +2,6 @@ package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.UserRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
