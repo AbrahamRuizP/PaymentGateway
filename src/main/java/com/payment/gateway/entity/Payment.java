@@ -16,6 +16,12 @@ import java.util.UUID;
 @ToString(exclude = {"customer", "merchant"})
 @Getter
 @Setter
+@Table(name = "payment", indexes = {
+        @Index(name = "idx_payment_merchant_id", columnList = "merchant_id"),
+        @Index(name = "idx_payment_customer_id", columnList = "customer_id"),
+        @Index(name = "idx_payment_status", columnList = "status"),
+        @Index(name = "idx_payment_created_at", columnList = "created_at")
+})
 public class Payment {
 
     @Id
@@ -47,7 +53,7 @@ public class Payment {
     private String networkReference = "";
 
     /* Idempotency */
-    @Column(name = "idempotency_key")
+    @Column(name = "idempotency_key", nullable = false, unique = true)
     private String idempotencyKey = "";
 
     /* Relationships */
