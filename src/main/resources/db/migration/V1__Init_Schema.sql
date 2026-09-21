@@ -3,23 +3,23 @@
 -- Purpose: Store application users.
 -- ==================================================
 CREATE TABLE users (
-                       id UUID NOT NULL,
-                       first_name VARCHAR(255),
-                       last_name VARCHAR(255),
-                       email VARCHAR(255),
-                       reset_token VARCHAR(255),
-                       password_hash VARCHAR(255),
-                       phone VARCHAR(255),
-                       username VARCHAR(255) NOT NULL,
-                       user_role VARCHAR(50),
+    id UUID NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    email VARCHAR(255),
+    reset_token VARCHAR(255),
+    password_hash VARCHAR(255),
+    phone VARCHAR(255),
+    username VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
 
-                       account_non_expired BOOLEAN NOT NULL,
-                       account_non_locked BOOLEAN NOT NULL,
-                       credentials_non_expired BOOLEAN NOT NULL,
-                       enabled BOOLEAN NOT NULL,
+    account_non_expired BOOLEAN NOT NULL,
+    account_non_locked BOOLEAN NOT NULL,
+    credentials_non_expired BOOLEAN NOT NULL,
+    enabled BOOLEAN NOT NULL,
 
-                       CONSTRAINT pk_users PRIMARY KEY (id),
-                       CONSTRAINT uk_users_username UNIQUE (username)
+    CONSTRAINT pk_users PRIMARY KEY (id),
+    CONSTRAINT uk_users_username UNIQUE (username)
 );
 
 -- ==================================================
@@ -86,37 +86,37 @@ CREATE TABLE payment_intent (
 -- Purpose: Store executed payment transactions.
 -- ==================================================
 CREATE TABLE payment (
-                         id UUID NOT NULL,
-                         amount NUMERIC(19,4) NOT NULL,
-                         currency VARCHAR(10) NOT NULL,
-                         description TEXT,
-                         status VARCHAR(50) NOT NULL,
+    id UUID NOT NULL,
+    amount NUMERIC(19,4) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) NOT NULL,
 
-                         created_at TIMESTAMP WITH TIME ZONE,
-                         updated_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE,
 
-                         provider_payment_id VARCHAR(255),
-                         authorization_code VARCHAR(255),
-                         acquirer_reference VARCHAR(255),
-                         network_reference VARCHAR(255),
+    provider_payment_id UUID,
+    authorization_code VARCHAR(255),
+    acquirer_reference VARCHAR(255),
+    network_reference VARCHAR(255),
 
-                         idempotency_key VARCHAR(255) NOT NULL,
+    idempotency_key VARCHAR(255) NOT NULL,
 
-                         merchant_id UUID,
-                         customer_id UUID,
+    merchant_id UUID,
+    customer_id UUID,
 
-                         CONSTRAINT pk_payment PRIMARY KEY (id),
+    CONSTRAINT pk_payment PRIMARY KEY (id),
 
-                        CONSTRAINT uk_payment_idempotency_key
-                        UNIQUE (idempotency_key),
+    CONSTRAINT uk_payment_idempotency_key
+    UNIQUE (idempotency_key),
 
-                        CONSTRAINT fk_payment_customer
-                        FOREIGN KEY (customer_id)
-                        REFERENCES customer (id),
+    CONSTRAINT fk_payment_customer
+    FOREIGN KEY (customer_id)
+    REFERENCES customer (id),
 
-                        CONSTRAINT fk_payment_merchant
-                        FOREIGN KEY (merchant_id)
-                        REFERENCES merchant (id)
+    CONSTRAINT fk_payment_merchant
+    FOREIGN KEY (merchant_id)
+    REFERENCES merchant (id)
 );
 
 -- ==================================================
@@ -166,7 +166,15 @@ CREATE TABLE audit_event (
 -- Purpose: Store incoming webhook events.
 -- ==================================================
 CREATE TABLE webhook_event (
-                               id UUID NOT NULL,
+    id UUID NOT NULL,
 
-                               CONSTRAINT pk_webhook_event PRIMARY KEY (id)
+    CONSTRAINT pk_webhook_event PRIMARY KEY (id)
+);
+
+CREATE TABLE refund (
+    id UUID NOT NULL,
+    amount NUMERIC(19, 4) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    CONSTRAINT pk_refund PRIMARY KEY (id)
 );
