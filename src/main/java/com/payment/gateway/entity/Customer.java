@@ -33,6 +33,7 @@ public class Customer {
     @NotEmpty
     private String lastName = "";
 
+    @Builder.Default
     @Column(columnDefinition = "TEXT")
     private String description = "";
 
