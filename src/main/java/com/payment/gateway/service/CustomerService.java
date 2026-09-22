@@ -1,5 +1,7 @@
 package com.payment.gateway.service;
 
+import com.payment.gateway.controller.DTO.CreateCustomerRequest;
+//import com.payment.gateway.controller.DTO.CustomerResponse;
 import com.payment.gateway.entity.Customer;
 import com.payment.gateway.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
@@ -33,4 +35,17 @@ public class CustomerService {
         return customerRepository.softDeleteById(id) > 0;
     }
 
+    @Transactional
+    public Customer createCustomer(CreateCustomerRequest event) {
+        Customer customer = buildCustomer(event);
+        return customerRepository.save(customer);
+    }
+
+    private static Customer buildCustomer(CreateCustomerRequest event) {
+        return Customer.builder()
+                .description(event.description())
+                .firstName(event.firstName())
+                .lastName(event.lastName())
+                .build();
+    }
 }
