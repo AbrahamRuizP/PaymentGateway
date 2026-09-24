@@ -1,5 +1,7 @@
 package com.payment.gateway.entity;
 
+import com.payment.gateway.entity.enums.MerchantStatus;
+import com.payment.gateway.service.MerchantService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,13 +18,17 @@ import java.util.UUID;
 public class Merchant {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "business_name")
     private String businessName = "";
     private String email = "";
-    private String status = "";
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MerchantStatus status = MerchantStatus.CREATED;
 
     private Instant createdAt = null;
     private Instant updatedAt = null;
