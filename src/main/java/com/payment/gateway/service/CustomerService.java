@@ -36,8 +36,8 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer createCustomer(CreateCustomerRequest event) {
-        Customer customer = buildCustomer(event);
+    public Customer createCustomer(CreateCustomerRequest request) {
+        Customer customer = buildCustomer(request);
         return customerRepository.save(customer);
     }
 
