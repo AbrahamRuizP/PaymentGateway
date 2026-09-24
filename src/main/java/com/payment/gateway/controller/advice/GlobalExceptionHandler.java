@@ -2,6 +2,7 @@ package com.payment.gateway.controller.advice;
 
 import com.payment.gateway.controller.DTO.ErrorResponse;
 import com.payment.gateway.exception.CustomerNotFoundException;
+import com.payment.gateway.exception.MerchantNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,22 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleCustomerNotFound(
             CustomerNotFoundException exception,
+            HttpServletRequest request
+    ) {
+
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(MerchantNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleMerchantNotFound(
+            MerchantNotFoundException exception,
             HttpServletRequest request
     ) {
 
