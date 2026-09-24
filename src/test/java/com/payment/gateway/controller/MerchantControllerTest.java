@@ -3,7 +3,6 @@ package com.payment.gateway.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payment.gateway.config.JacksonConfig;
 import com.payment.gateway.controller.DTO.CreateMerchantRequest;
-import com.payment.gateway.controller.DTO.MerchantResponse;
 import com.payment.gateway.entity.Merchant;
 import com.payment.gateway.service.MerchantService;
 import org.junit.jupiter.api.Test;

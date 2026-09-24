@@ -21,7 +21,7 @@ public class Merchant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "business_name")
+    @Column(name = "business_name", nullable = false)
     private String businessName = "";
     private String email = "";
 
@@ -30,15 +30,14 @@ public class Merchant {
     @Column(nullable = false)
     private MerchantStatus status = MerchantStatus.CREATED;
 
-    private Instant createdAt = null;
-    private Instant updatedAt = null;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     @PrePersist
     private void prePersist() {
         if ( createdAt == null ) {
             createdAt = Instant.now();
         }
-
         if ( updatedAt == null ) {
             updatedAt = createdAt;
         }
