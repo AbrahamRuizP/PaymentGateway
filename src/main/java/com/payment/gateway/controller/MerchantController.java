@@ -22,7 +22,7 @@ public class MerchantController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MerchantResponse createMerchant(@RequestBody @Valid CreateMerchantRequest request) {
-        Merchant m = merchantService.createMerchant(request);
+        Merchant m = merchantService.create(request);
 
         return toResponse(m);
     }
@@ -34,6 +34,14 @@ public class MerchantController {
                 .orElseThrow(() -> new MerchantNotFoundException(id));
 
         return toResponse(m);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMerchant(@PathVariable UUID id) {
+        if (!merchantService.softDeleteById(id)) {
+            throw new MerchantNotFoundException(id);
+        }
     }
 
     private static MerchantResponse toResponse(Merchant m) {
