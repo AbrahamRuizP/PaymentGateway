@@ -45,9 +45,12 @@ public class MerchantController {
     }
 
     private static MerchantResponse toResponse(Merchant m) {
-        return new MerchantResponse(
-                m.getId(), m.getBusinessName(), m.getEmail(), m.getStatus(), m.getCreatedAt()
-        );
+        return MerchantResponse.builder()
+                .id(m.getId())
+                .businessName(m.getBusinessName())
+                .email(m.getEmail())
+                .status(m.getStatus())
+                .createdAt(m.getCreatedAt())
+                .build();
     }
-
 }

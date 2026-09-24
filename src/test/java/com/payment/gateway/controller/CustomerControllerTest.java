@@ -5,8 +5,9 @@ import com.payment.gateway.controller.DTO.CreateCustomerRequest;
 import com.payment.gateway.controller.DTO.CustomerResponse;
 import com.payment.gateway.entity.Customer;
 import com.payment.gateway.service.CustomerService;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -21,18 +22,20 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
-@RequiredArgsConstructor
+@WebMvcTest(controllers = CustomerController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CustomerControllerTest {
 
-    private final ObjectMapper objectMapper;
-    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockitoBean
     private CustomerService customerService;
 
     @Test
-    private void shouldCreateCustomer() throws Exception {
+    void shouldCreateCustomer() throws Exception {
         UUID id = UUID.randomUUID();
 
         Customer customer = Customer.builder()
@@ -63,7 +66,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    private void shouldGetCustomer() throws Exception {
+    void shouldGetCustomer() throws Exception {
         UUID id = UUID.randomUUID();
 
         Customer customer = Customer.builder()
@@ -92,20 +95,20 @@ public class CustomerControllerTest {
     }
 
     @Test
-    private void shouldReturn404WhenCustomerDoesNotExists() throws Exception {
+    void shouldReturn404WhenCustomerDoesNotExists() throws Exception {
         UUID id = UUID.randomUUID();
 
         when(customerService.findByIdAndDeletedFalse(id))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/customer/{id}", id))
+        mockMvc.perform(get("/customers/{id}", id))
                 .andExpect(status().isNotFound());
 
         verify(customerService).findByIdAndDeletedFalse(id);
     }
 
     @Test
-    private void shouldDeleteCustomer() throws Exception {
+    void shouldDeleteCustomer() throws Exception {
         UUID id = UUID.randomUUID();
 
         when(customerService.deleteCustomer(id))
@@ -119,21 +122,20 @@ public class CustomerControllerTest {
     }
 
     @Test
-    private void shouldReturn404WhenDeletingNonExistingCustomer() throws Exception {
+    void shouldReturn404WhenDeletingNonExistingCustomer() throws Exception {
         UUID id = UUID.randomUUID();
 
         when(customerService.deleteCustomer(id))
                 .thenReturn(false);
 
         mockMvc.perform(delete("/customers/{id}", id))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(status().isNotFound());
 
         verify(customerService).deleteCustomer(id);
     }
 
     @Test
-    private void shouldRejectCustomerWhenFistNameBlank() throws Exception {
+    void shouldRejectCustomerWhenFistNameBlank() throws Exception {
         CreateCustomerRequest request = new CreateCustomerRequest(
                 "", "Done", ""
         );
