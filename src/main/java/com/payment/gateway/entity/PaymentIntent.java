@@ -2,7 +2,6 @@ package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.Currency;
 import com.payment.gateway.entity.enums.PaymentStatus;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,20 +12,25 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = {"customer", "merchant", "payment"})
 public class PaymentIntent {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Builder.Default
     private BigDecimal amount = new BigDecimal("0.0");
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "currency")
+    @Column(nullable = false)
     private Currency currency = Currency.USD;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
@@ -47,21 +51,16 @@ public class PaymentIntent {
     private Payment payment;
 
     @Column(name = "created_at")
-    private Instant createdAt = null;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private Instant updatedAt = null;
+    private Instant updatedAt;
 
     @PrePersist
     private void prePersist() {
-        if ( id == null ) {
-            id = UUID.randomUUID();
-        }
-
         if (createdAt == null) {
             createdAt = Instant.now();
         }
-
         if (updatedAt == null) {
             updatedAt = createdAt;
         }
@@ -72,3 +71,4 @@ public class PaymentIntent {
         updatedAt = Instant.now();
     }
 }
+
