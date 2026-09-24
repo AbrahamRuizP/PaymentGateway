@@ -1,6 +1,7 @@
 package com.payment.gateway.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payment.gateway.config.JacksonConfig;
 import com.payment.gateway.controller.DTO.CreateMerchantRequest;
 import com.payment.gateway.controller.DTO.MerchantResponse;
 import com.payment.gateway.entity.Merchant;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,9 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = MerchantController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(JacksonConfig.class)
 public class MerchantControllerTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
