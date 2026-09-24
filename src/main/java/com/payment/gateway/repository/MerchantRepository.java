@@ -2,9 +2,20 @@ package com.payment.gateway.repository;
 
 import com.payment.gateway.entity.Merchant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface MerchantRepository extends JpaRepository<Merchant, UUID> {}
+public interface MerchantRepository extends JpaRepository<Merchant, UUID> {
+    @Modifying
+    @Query("""
+        UPDATE Merchant m
+            SET m.status = "DISABLED"
+            WHERE m.id = :id
+    """)
+    int softDeleteById(@Param("id") UUID id);
+}
