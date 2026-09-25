@@ -21,4 +21,6 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
       AND c.deleted = false
 """)
     int softDeleteById(UUID id);
+
+    boolean existsByIdAndDeletedFalse(UUID id);
 }
