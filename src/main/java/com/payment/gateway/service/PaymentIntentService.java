@@ -4,7 +4,6 @@ import com.payment.gateway.controller.DTO.CreatePaymentIntentRequest;
 import com.payment.gateway.entity.Customer;
 import com.payment.gateway.entity.Merchant;
 import com.payment.gateway.entity.PaymentIntent;
-import com.payment.gateway.entity.enums.PaymentIntentStatus;
 import com.payment.gateway.exception.CustomerNotFoundException;
 import com.payment.gateway.exception.MerchantNotFoundException;
 import com.payment.gateway.repository.CustomerRepository;
@@ -44,13 +43,13 @@ public class PaymentIntentService {
     }
 
     private static PaymentIntent buildIntent(CreatePaymentIntentRequest request) {
-        return PaymentIntent.builder()
-                .merchant(Merchant.builder().id(request.merchantId()).build())
-                .customer(Customer.builder().id(request.customerId()).build())
-                .amount(request.amount())
-                .currency(request.currency())
-                .description(request.description())
-                .status(PaymentIntentStatus.REQUIRES_PAYMENT_METHOD)
-                .build();
+        PaymentIntent paymentIntent = new PaymentIntent();
+        paymentIntent.setAmount(request.amount());
+        paymentIntent.setCurrency(request.currency());
+        paymentIntent.setDescription(request.description());
+        paymentIntent.setCustomer(Customer.builder().id(request.customerId()).build());
+        paymentIntent.setMerchant(Merchant.builder().id(request.merchantId()).build());
+
+        return paymentIntent;
     }
 }
