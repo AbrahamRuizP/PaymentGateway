@@ -2,7 +2,7 @@ package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.Currency;
 import com.payment.gateway.entity.enums.PaymentIntentStatus;
-import com.payment.gateway.entity.enums.PaymentStatus;
+import com.payment.gateway.exception.InvalidPaymentIntentTransitionException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,9 +13,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(exclude = {"customer", "merchant", "payment"})
 public class PaymentIntent {
 
@@ -23,16 +21,14 @@ public class PaymentIntent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Builder.Default
     @Column(nullable = false)
     private BigDecimal amount = new BigDecimal("0.0");
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Currency currency = Currency.USD;
 
-    @Builder.Default
+    @Setter(AccessLevel.NONE)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentIntentStatus status = PaymentIntentStatus.REQUIRES_PAYMENT_METHOD;
@@ -68,6 +64,31 @@ public class PaymentIntent {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
+    }
+
+    public void transitionTo( PaymentIntentStatus newStatus ) {
+        if (!isValidTransition(newStatus)) {
+            throw new InvalidPaymentIntentTransitionException(
+                    this.status,
+                    newStatus,
+                    id
+            );
+        }
+
+        this.status = newStatus;
+    }
+
+    private boolean isValidTransition(PaymentIntentStatus newStatus) {
+        return switch (status) {
+            case REQUIRES_PAYMENT_METHOD ->
+                    newStatus == PaymentIntentStatus.PROCESSING;
+
+            case PROCESSING ->
+                    newStatus == PaymentIntentStatus.SUCCEEDED
+                            || newStatus == PaymentIntentStatus.FAILED;
+
+            case SUCCEEDED, FAILED -> false;
+        };
     }
 }
 
