@@ -1,6 +1,7 @@
 package com.payment.gateway.entity;
 
 import com.payment.gateway.entity.enums.Currency;
+import com.payment.gateway.entity.enums.PaymentIntentStatus;
 import com.payment.gateway.entity.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,7 @@ public class PaymentIntent {
     private UUID id;
 
     @Builder.Default
+    @Column(nullable = false)
     private BigDecimal amount = new BigDecimal("0.0");
 
     @Builder.Default
@@ -33,10 +35,13 @@ public class PaymentIntent {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status = PaymentStatus.REQUIRES_PAYMENT_METHOD;
+    private PaymentIntentStatus status = PaymentIntentStatus.REQUIRES_PAYMENT_METHOD;
 
     @Column(columnDefinition = "TEXT")
     private String description = "";
+
+    private Instant createdAt;
+    private Instant updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -49,12 +54,6 @@ public class PaymentIntent {
     @ManyToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
 
     @PrePersist
     private void prePersist() {
