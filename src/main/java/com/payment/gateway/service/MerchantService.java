@@ -5,7 +5,6 @@ import com.payment.gateway.entity.Merchant;
 import com.payment.gateway.entity.enums.MerchantStatus;
 import com.payment.gateway.repository.MerchantRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class MerchantService {
             return false;
         }
 
-        return merchantRepository.softDeleteById(id) > 0;
+        return merchantRepository.disableById(id) > 0;
     }
 
     private static Merchant buildMerchant(CreateMerchantRequest request) {
