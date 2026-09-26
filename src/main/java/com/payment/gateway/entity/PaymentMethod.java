@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +43,9 @@ public class PaymentMethod {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<PaymentIntent> paymentIntents;
 
     @PrePersist
     private void prePersist() {
