@@ -3,6 +3,7 @@ package com.payment.gateway.service;
 import com.payment.gateway.controller.DTO.CreateCustomerRequest;
 //import com.payment.gateway.controller.DTO.CustomerResponse;
 import com.payment.gateway.entity.Customer;
+import com.payment.gateway.exception.CustomerNotFoundException;
 import com.payment.gateway.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,9 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     /* METHODS */
-    public Optional<Customer> findById(UUID id) {
-        return customerRepository.findById(id);
-    }
-
-    public Optional<Customer> findByIdAndDeletedFalse(UUID id) {
-        return customerRepository.findByIdAndDeletedFalse(id);
+    public Customer findByIdAndDeletedFalse(UUID id) {
+        return customerRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     @Transactional

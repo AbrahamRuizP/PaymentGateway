@@ -28,9 +28,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomerResponse getCustomer(@PathVariable UUID id) {
-        Customer c = customerService.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
-
+        Customer c = customerService.findByIdAndDeletedFalse(id);
         return toResponse(c);
     }
 

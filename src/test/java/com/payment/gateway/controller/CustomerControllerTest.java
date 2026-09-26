@@ -5,6 +5,7 @@ import com.payment.gateway.config.JacksonConfig;
 import com.payment.gateway.controller.DTO.CreateCustomerRequest;
 import com.payment.gateway.controller.DTO.CustomerResponse;
 import com.payment.gateway.entity.Customer;
+import com.payment.gateway.exception.CustomerNotFoundException;
 import com.payment.gateway.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,7 @@ public class CustomerControllerTest {
         );
 
         when(customerService.findByIdAndDeletedFalse(id))
-                .thenReturn(Optional.of(customer));
+                .thenReturn(customer);
 
         mockMvc.perform(get("/customers/{id}", id))
                 .andExpect(status().isOk())
@@ -103,7 +104,7 @@ public class CustomerControllerTest {
         UUID id = UUID.randomUUID();
 
         when(customerService.findByIdAndDeletedFalse(id))
-                .thenReturn(Optional.empty());
+                .thenThrow(new CustomerNotFoundException(id));
 
         mockMvc.perform(get("/customers/{id}", id))
                 .andExpect(status().isNotFound());
