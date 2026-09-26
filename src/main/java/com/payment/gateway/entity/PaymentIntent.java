@@ -51,6 +51,10 @@ public class PaymentIntent {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "payment_method_id")
+    private PaymentMethod paymentMethod;
+
     @PrePersist
     private void prePersist() {
         if (createdAt == null) {
@@ -81,6 +85,9 @@ public class PaymentIntent {
     private boolean isValidTransition(PaymentIntentStatus newStatus) {
         return switch (status) {
             case REQUIRES_PAYMENT_METHOD ->
+                    newStatus == PaymentIntentStatus.REQUIRES_CONFIRMATION;
+
+            case REQUIRES_CONFIRMATION ->
                     newStatus == PaymentIntentStatus.PROCESSING;
 
             case PROCESSING ->
