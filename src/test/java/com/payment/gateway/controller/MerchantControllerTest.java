@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payment.gateway.config.JacksonConfig;
 import com.payment.gateway.controller.DTO.CreateMerchantRequest;
 import com.payment.gateway.entity.Merchant;
+import com.payment.gateway.exception.MerchantNotFoundException;
 import com.payment.gateway.service.MerchantService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class MerchantControllerTest {
                 .build();
 
         when(merchantService.findById(id))
-                .thenReturn(Optional.of(merchant));
+                .thenReturn(merchant);
 
         mockMvc.perform(get("/merchants/{id}", id))
                 .andExpect(status().isOk())
@@ -96,7 +97,7 @@ public class MerchantControllerTest {
         UUID id = UUID.randomUUID();
 
         when(merchantService.findById(id))
-                .thenReturn(Optional.empty());
+                .thenThrow(new MerchantNotFoundException(id));
 
         mockMvc.perform(get("/merchants/{id}", id))
                 .andExpect(status().isNotFound());

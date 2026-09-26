@@ -30,9 +30,7 @@ public class MerchantController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MerchantResponse getMerchant(@PathVariable UUID id) {
-        Merchant m = merchantService.findById(id)
-                .orElseThrow(() -> new MerchantNotFoundException(id));
-
+        Merchant m = merchantService.findById(id);
         return toResponse(m);
     }
 

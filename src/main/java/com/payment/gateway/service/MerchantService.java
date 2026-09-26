@@ -3,6 +3,7 @@ package com.payment.gateway.service;
 import com.payment.gateway.controller.DTO.CreateMerchantRequest;
 import com.payment.gateway.entity.Merchant;
 import com.payment.gateway.entity.enums.MerchantStatus;
+import com.payment.gateway.exception.MerchantNotFoundException;
 import com.payment.gateway.repository.MerchantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,9 @@ public class MerchantService {
 
     private final MerchantRepository merchantRepository;
 
-    public Optional<Merchant> findById(UUID id) {
-        return merchantRepository.findById(id);
+    public Merchant findById(UUID id) {
+        return merchantRepository.findById(id)
+                .orElseThrow(() -> new MerchantNotFoundException(id));
     }
 
     public Merchant create(CreateMerchantRequest request) {

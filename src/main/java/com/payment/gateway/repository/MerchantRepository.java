@@ -21,5 +21,5 @@ public interface MerchantRepository extends JpaRepository<Merchant, UUID> {
     """)
     int disableById(@Param("id") UUID id);
 
-    boolean existsByIdAndStatusActive(UUID id);
+    boolean existsByIdAndStatus(UUID id, MerchantStatus status);
 }
