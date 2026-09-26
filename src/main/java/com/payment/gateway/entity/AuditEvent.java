@@ -30,12 +30,12 @@ public class AuditEvent {
     private EntityType entityType;
 
     @Column(name = "entity_id")
-    private UUID entityId = null;
+    private UUID entityId;
 
-    private UUID actorId = null;
+    private UUID actorId;
 
     @Column(nullable = false)
-    private Instant createdAt = null;
+    private Instant createdAt;
 
     @PrePersist
     private void prePersist() {
