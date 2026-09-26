@@ -4,8 +4,10 @@ import com.payment.gateway.controller.DTO.CreatePaymentIntentRequest;
 import com.payment.gateway.entity.Customer;
 import com.payment.gateway.entity.Merchant;
 import com.payment.gateway.entity.PaymentIntent;
+import com.payment.gateway.entity.enums.MerchantStatus;
 import com.payment.gateway.exception.CustomerNotFoundException;
 import com.payment.gateway.exception.MerchantNotFoundException;
+import com.payment.gateway.exception.PaymentIntentNotFoundException;
 import com.payment.gateway.repository.CustomerRepository;
 import com.payment.gateway.repository.MerchantRepository;
 import com.payment.gateway.repository.PaymentIntentRepository;
@@ -24,8 +26,9 @@ public class PaymentIntentService {
     private final CustomerRepository customerRepository;
     private final MerchantRepository merchantRepository;
 
-    public Optional<PaymentIntent> findById(UUID id) {
-        return paymentIntentRepository.findById(id);
+    public PaymentIntent findById(UUID id) {
+        return paymentIntentRepository.findById(id)
+                .orElseThrow(() -> new PaymentIntentNotFoundException(id));
     }
 
     @Transactional
@@ -33,7 +36,7 @@ public class PaymentIntentService {
         if (!customerRepository.existsByIdAndDeletedFalse(request.customerId())) {
             throw new CustomerNotFoundException(request.customerId());
 
-        } else if (!merchantRepository.existsByIdAndStatusActive(request.merchantId())) {
+        } else if (!merchantRepository.existsByIdAndStatus(request.merchantId(), MerchantStatus.ACTIVE)) {
             throw new MerchantNotFoundException(request.merchantId());
 
         }
