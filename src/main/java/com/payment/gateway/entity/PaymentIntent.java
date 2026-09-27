@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"customer", "merchant", "payment"})
+@ToString
 public class PaymentIntent {
 
     @Id
@@ -39,18 +39,22 @@ public class PaymentIntent {
     private Instant createdAt;
     private Instant updatedAt;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "merchant_id")
     private Merchant merchant;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
