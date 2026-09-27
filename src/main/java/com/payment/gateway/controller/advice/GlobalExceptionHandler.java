@@ -1,8 +1,7 @@
 package com.payment.gateway.controller.advice;
 
 import com.payment.gateway.controller.DTO.ErrorResponse;
-import com.payment.gateway.exception.CustomerNotFoundException;
-import com.payment.gateway.exception.MerchantNotFoundException;
+import com.payment.gateway.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +19,6 @@ public class GlobalExceptionHandler {
             CustomerNotFoundException exception,
             HttpServletRequest request
     ) {
-
         return new ErrorResponse(
                 Instant.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -36,7 +34,6 @@ public class GlobalExceptionHandler {
             MerchantNotFoundException exception,
             HttpServletRequest request
     ) {
-
         return new ErrorResponse(
                 Instant.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -45,4 +42,44 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
     }
+
+    @ExceptionHandler(PaymentMethodNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlePaymentMethodNotFound(
+            PaymentMethodNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(PaymentIntentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlePaymentIntentNotFound(
+            PaymentIntentNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+//    public ErrorResponse handleInvalidPaymentIntentTransition(
+//        InvalidPaymentIntentTransitionException exception,
+//        HttpServletRequest request
+//    ) {
+//        return new ErrorResponse(
+//            Instant.now(),
+//            HttpStatus.
+//        );
+//    }
 }
