@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
 //        );
 //    }
 
-    @ExceptionHandler(PaymentMethodNotFoundException.class)
+    @ExceptionHandler(PaymentMethodRequiredException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlePaymentMethodRequired(
             PaymentMethodRequiredException exception,
