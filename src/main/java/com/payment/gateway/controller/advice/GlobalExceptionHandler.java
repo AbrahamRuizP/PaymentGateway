@@ -2,6 +2,7 @@ package com.payment.gateway.controller.advice;
 
 import com.payment.gateway.controller.DTO.ErrorResponse;
 import com.payment.gateway.exception.*;
+import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -82,4 +83,19 @@ public class GlobalExceptionHandler {
 //            HttpStatus.
 //        );
 //    }
+
+    @ExceptionHandler(PaymentMethodNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlePaymentMethodRequired(
+            PaymentMethodRequiredException exception,
+            HttpServletRequest request
+    ) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI()
+        );
+    }
 }
