@@ -1,8 +1,10 @@
 package com.payment.gateway.controller;
 
+import com.payment.gateway.controller.DTO.AttachPaymentMethodRequest;
 import com.payment.gateway.controller.DTO.CreatePaymentIntentRequest;
 import com.payment.gateway.controller.DTO.PaymentIntentResponse;
 import com.payment.gateway.entity.PaymentIntent;
+import com.payment.gateway.entity.PaymentMethod;
 import com.payment.gateway.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,17 @@ public class PaymentIntentController {
     @ResponseStatus(HttpStatus.OK)
     public PaymentIntentResponse getPaymentIntent(@PathVariable UUID id) {
         PaymentIntent intent = service.findById(id);
+        return toResponse(intent);
+    }
+
+    @PostMapping("/{id}/payment-method") // id reference to payment intent id
+    @ResponseStatus(HttpStatus.OK)
+    public PaymentIntentResponse attachPaymentMethod(
+            @PathVariable UUID id,
+            @RequestBody @Valid AttachPaymentMethodRequest request
+    ) {
+        PaymentIntent intent = service.attachPaymentMethod(id, request);
+
         return toResponse(intent);
     }
 
