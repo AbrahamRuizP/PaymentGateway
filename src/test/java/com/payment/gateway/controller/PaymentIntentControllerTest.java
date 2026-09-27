@@ -53,15 +53,7 @@ public class PaymentIntentControllerTest {
         UUID customerId = UUID.randomUUID();
         UUID merchantId = UUID.randomUUID();
         Instant now = Instant.now();
-
-        PaymentIntent paymentIntent = new PaymentIntent();
-        paymentIntent.setId(id);
-        paymentIntent.setAmount(new BigDecimal("2.00"));
-        paymentIntent.setCurrency(Currency.USD);
-        paymentIntent.setCreatedAt(now);
-        paymentIntent.setUpdatedAt(now);
-        paymentIntent.setCustomer(Customer.builder().id(customerId).build());
-        paymentIntent.setMerchant(Merchant.builder().id(merchantId).build());
+        PaymentIntent paymentIntent = createIntent(id, now);
 
         CreatePaymentIntentRequest request = new CreatePaymentIntentRequest(
                 paymentIntent.getAmount(), Currency.USD, "test intent", merchantId, customerId
@@ -190,6 +182,7 @@ public class PaymentIntentControllerTest {
         PaymentIntent intent = new PaymentIntent();
         intent.setId(id);
         intent.setAmount(new BigDecimal("2.00"));
+        intent.setDescription("test intent");
         intent.setCurrency(Currency.USD);
         intent.setCreatedAt(createdAt);
         intent.setUpdatedAt(createdAt);
