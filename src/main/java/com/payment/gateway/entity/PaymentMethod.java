@@ -12,7 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 @Builder
 @ToString
 @Table(name = "payment_method")
@@ -44,7 +43,7 @@ public class PaymentMethod {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY)
     private List<PaymentIntent> paymentIntents;
 
     @PrePersist
