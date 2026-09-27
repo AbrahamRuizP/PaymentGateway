@@ -42,15 +42,7 @@ public class CustomerControllerTest {
     @Test
     void shouldCreateCustomer() throws Exception {
         UUID id = UUID.randomUUID();
-
-        Customer customer = Customer.builder()
-                .id(id)
-                .firstName("John")
-                .lastName("Doe")
-                .description("Testing Customer Controller")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
+        Customer customer = buildCustomer(id);
 
         CreateCustomerRequest request = new CreateCustomerRequest(
                 customer.getFirstName(), customer.getLastName(), customer.getDescription()
@@ -73,15 +65,7 @@ public class CustomerControllerTest {
     @Test
     void shouldGetCustomer() throws Exception {
         UUID id = UUID.randomUUID();
-
-        Customer customer = Customer.builder()
-                .id(id)
-                .firstName("John")
-                .lastName("Doe")
-                .description("Testing Customer Controller")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
+        Customer customer = buildCustomer(id);
 
         CustomerResponse response = new CustomerResponse(
                 id, "John", "Doe", customer.getCreatedAt(), customer.getUpdatedAt()
@@ -151,5 +135,16 @@ public class CustomerControllerTest {
                 .andExpect(status().isBadRequest());
 
         verify(customerService, never()).createCustomer(any(CreateCustomerRequest.class));
+    }
+
+    private static Customer buildCustomer(UUID id) {
+        return Customer.builder()
+                .id(id)
+                .firstName("John")
+                .lastName("Doe")
+                .description("Testing Customer Controller")
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }
