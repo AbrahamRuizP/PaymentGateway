@@ -4,7 +4,6 @@ import com.payment.gateway.controller.DTO.AttachPaymentMethodRequest;
 import com.payment.gateway.controller.DTO.CreatePaymentIntentRequest;
 import com.payment.gateway.controller.DTO.PaymentIntentResponse;
 import com.payment.gateway.entity.PaymentIntent;
-import com.payment.gateway.entity.PaymentMethod;
 import com.payment.gateway.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +42,14 @@ public class PaymentIntentController {
             @RequestBody @Valid AttachPaymentMethodRequest request
     ) {
         PaymentIntent intent = service.attachPaymentMethod(id, request);
+
+        return toResponse(intent);
+    }
+
+    @PostMapping("/{id}/confirm")
+    @ResponseStatus(HttpStatus.OK)
+    public PaymentIntentResponse confirmPaymentMethod(@PathVariable UUID id) {
+        PaymentIntent intent = service.confirmPaymentIntent(id);
 
         return toResponse(intent);
     }
