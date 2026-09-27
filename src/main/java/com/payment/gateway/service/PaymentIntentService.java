@@ -8,9 +8,7 @@ import com.payment.gateway.entity.PaymentIntent;
 import com.payment.gateway.entity.PaymentMethod;
 import com.payment.gateway.entity.enums.MerchantStatus;
 import com.payment.gateway.entity.enums.PaymentIntentStatus;
-import com.payment.gateway.exception.CustomerNotFoundException;
-import com.payment.gateway.exception.MerchantNotFoundException;
-import com.payment.gateway.exception.PaymentIntentNotFoundException;
+import com.payment.gateway.exception.*;
 import com.payment.gateway.repository.CustomerRepository;
 import com.payment.gateway.repository.MerchantRepository;
 import com.payment.gateway.repository.PaymentIntentRepository;
@@ -52,17 +50,33 @@ public class PaymentIntentService {
             UUID intentId,
             AttachPaymentMethodRequest request
     ) {
-        PaymentMethod paymentMethod = paymentMethodService.findById(intentId);
+        PaymentMethod paymentMethod = paymentMethodService.findById(request.paymentMethodId());
         PaymentIntent paymentIntent = findById(intentId);
 
         if (!paymentIntent.getCustomer().getId()
                 .equals(paymentMethod.getCustomer().getId())) {
-            // TODO: throw invalid payment method exception
+            throw new InvalidPaymentMethodException("Payment Intent associated " +
+                    "Customer should be equal to Payment Method associated Customer.");
         }
 
         // entity manager persist changes without intervention
-        paymentIntent.setPaymentMethod(PaymentMethod.builder().id(request.paymentMethodId()).build());
+        paymentIntent.setPaymentMethod(paymentMethod);
         paymentIntent.transitionTo(PaymentIntentStatus.REQUIRES_CONFIRMATION);
+
+        return paymentIntent;
+    }
+
+    @Transactional
+    public PaymentIntent confirmPaymentIntent(UUID id) {
+        PaymentIntent paymentIntent = findById(id);
+
+        // verify if payment intent has an associated payment method
+        if (paymentIntent.getPaymentMethod() == null) {
+            throw new PaymentMethodRequiredException(id);
+        }
+        paymentIntent.transitionTo(PaymentIntentStatus.PROCESSING);
+
+        // TODO: init processing payment action
 
         return paymentIntent;
     }

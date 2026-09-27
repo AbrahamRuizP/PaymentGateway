@@ -48,7 +48,7 @@ public class PaymentIntentController {
 
     @PostMapping("/{id}/confirm")
     @ResponseStatus(HttpStatus.OK)
-    public PaymentIntentResponse confirmPaymentMethod(@PathVariable UUID id) {
+    public PaymentIntentResponse confirmPaymentIntent(@PathVariable UUID id) {
         PaymentIntent intent = service.confirmPaymentIntent(id);
 
         return toResponse(intent);
@@ -64,5 +64,4 @@ public class PaymentIntentController {
                 .createdAt(intent.getCreatedAt())
                 .build();
     }
-
 }
