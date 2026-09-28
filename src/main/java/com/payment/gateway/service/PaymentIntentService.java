@@ -55,8 +55,8 @@ public class PaymentIntentService {
 
         if (!paymentIntent.getCustomer().getId()
                 .equals(paymentMethod.getCustomer().getId())) {
-            throw new InvalidPaymentMethodException("Payment Intent associated " +
-                    "Customer should be equal to Payment Method associated Customer.");
+            throw new InvalidPaymentMethodException("The payment intent and payment method " +
+                    "must belong to the same customer.");
         }
 
         // entity manager persist changes without intervention
