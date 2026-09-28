@@ -74,7 +74,6 @@ public class PaymentIntentControllerTest {
                 .andExpect(jsonPath("$.createdAt").value(now.toString()));
 
         verify(paymentIntentService).create(any(CreatePaymentIntentRequest.class));
-
     }
 
     @Test
